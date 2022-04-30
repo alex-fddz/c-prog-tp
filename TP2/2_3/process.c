@@ -1,19 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 // Declaring the enum argument for chosen letter case
 enum casetype {lower_case, upper_case};
 
 char* transformString(char* string, enum casetype sel_case) {
+    int ch = 0; // var to track character in string
+
     switch (sel_case) {
-        case lower_case:
-            printf("lower %d", sel_case);
+        case lower_case: // Change to Lower Case
+            while (string[ch] != '\n') {
+                string[ch] = tolower(string[ch]);
+                ch++;
+            }
             break;
-        case upper_case:
-            printf("upper %d", sel_case);
+        case upper_case: // Change to Upper Case
+            while (string[ch] != '\n') {
+                string[ch] = toupper(string[ch]);
+                ch++;
+            }
             break;
-        default:
-            printf("default %d", sel_case);
+        default: // Do nothing
             break;
     }
 
