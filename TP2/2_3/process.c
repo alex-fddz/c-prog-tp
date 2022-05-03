@@ -9,17 +9,17 @@ enum casetype {lower_case, upper_case};
 /* Transform each char in a char array to 
    upper or lower case (or not) */
 char* transformString(char* string, enum casetype sel_case) {
-    int ch = 0; // var to track character in string
+    unsigned int ch = 0; // var to track character in string
 
     switch (sel_case) {
         case lower_case: // Change to Lower Case
-            while (string[ch] != '\n') {
+            while (string[ch] != '\0') {
                 string[ch] = tolower(string[ch]);
                 ch++;
             }
             break;
         case upper_case: // Change to Upper Case
-            while (string[ch] != '\n') {
+            while (string[ch] != '\0') {
                 string[ch] = toupper(string[ch]);
                 ch++;
             }
@@ -39,7 +39,7 @@ int main() {
     int input_case_opt; // option input for case transformation 
     enum casetype selected_case; // variable of type casetype
     char **text; // table of text (array of char arrays)
-    // char *word;
+    char *word;
     const char s[2] = " "; // separator for strtok
     char *token; // token for strtok
     unsigned int word_count = 0; // stats: word count
@@ -84,6 +84,8 @@ int main() {
         // Extend text table and Save word to text
         word_count++;
         text = (char**)realloc(text, sizeof(char*) * word_count);
+        // word = (char*)malloc(sizeof(char) * strlen(token));
+        // strcpy(word, token);
         text[word_count-1] = token;
         total_letters += strlen(token); // Add up letter count
 
@@ -99,9 +101,9 @@ int main() {
 
     // Free dynamically allocated memory
     free(str);
-    /* for (int w = 0; w < word_count; w++) {
-        free(text[w]);
-    } */
+    // for (int w = 0; w < word_count; w++) {
+    //     free(text[w]);
+    // } 
     free(text);
 
     return 1;
