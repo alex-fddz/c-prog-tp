@@ -6,8 +6,7 @@
 // Declaring the enum argument for chosen letter case
 enum casetype {lower_case, upper_case};
 
-/* Transform each char in a char array to 
-   upper or lower case (or not) */
+/* Transform each char in a char array to upper or lower case (or not) */
 char* transformString(char* string, enum casetype sel_case) {
     unsigned int ch = 0; // var to track character in string
 
@@ -36,15 +35,16 @@ int main() {
     char *str; // given string (char array)
     char in_char; // incoming character (input)
     unsigned int str_len = 0; // length of given string
+
     int input_case_opt; // option input for case transformation 
     enum casetype selected_case; // variable of type casetype
+
     char **text; // table of text (array of char arrays)
-    char *word;
     const char s[2] = " "; // separator for strtok
     char *token; // token for strtok
+
     unsigned int word_count = 0; // stats: word count
-    //unsigned int word_len = 0; // stats: current work length
-    unsigned int total_letters = 0; // stats: total word letters (non space chars)
+    unsigned int total_letters = 0; // stats: total non-space chars
     float avg_letters = 0; // stats: avg letters per word
 
     // Allocate memory for at least 1 character 
@@ -77,15 +77,12 @@ int main() {
     printf("Here are the words that you gave after changing the case:\n");
     printf("%s", str);
 
-    /* Get string stats (word count and avg chars per word) */
-    // Process the string and build the text table
+    // Process the string and build the text table, word by word (arr of str)
     token = strtok(str, s); // Get the first token/word 
     while( token != NULL ) { // Walk through other tokens/words
         // Extend text table and Save word to text
         word_count++;
         text = (char**)realloc(text, sizeof(char*) * word_count);
-        // word = (char*)malloc(sizeof(char) * strlen(token));
-        // strcpy(word, token);
         text[word_count-1] = token;
         total_letters += strlen(token); // Add up letter count
 
@@ -99,11 +96,9 @@ int main() {
    printf("\nThe total number of words is %d and the average number "
             "of letters per word is %.2f.\n", word_count, avg_letters);
 
+
     // Free dynamically allocated memory
     free(str);
-    // for (int w = 0; w < word_count; w++) {
-    //     free(text[w]);
-    // } 
     free(text);
 
     return 1;
