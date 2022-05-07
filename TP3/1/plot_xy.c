@@ -12,9 +12,11 @@ int main() {
     // Validate file pointer
     if (datafile != NULL) {
         // Process the data
-        while ( fscanf(datafile, "%f %f", &x, &y) != EOF ) {
+        do {
+            fscanf(datafile, "%f %f\n", &x, &y); 
             printf("x is %f and y is %f\n", x, y);
-        }
+        } while ( !feof(datafile) );
+
         // do{ }while( !feof(datafile) );
     }
     fclose(datafile); // Close the file.
