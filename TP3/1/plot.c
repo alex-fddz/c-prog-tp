@@ -28,11 +28,11 @@ int main(int argc, char** argv) {
     if (n==0) return -1;
 
     // Generate normal distribution 
-    low_bound = -3 * std;
-    upp_bound = 3 * std;
+    low_bound = mean - 3 * std;
+    upp_bound = mean + 3 * std;
     step_size = (upp_bound - low_bound) / n;
     for (double x = low_bound; x <= upp_bound; x += step_size) {
-        y =  (pow(M_E, (-0.5) * pow(x * mean / std, 2))) / (std * sqrt(2*M_PI));
+        y = pow(M_E, -(pow(x - mean, 2)) / (2 * pow(std, 2))) / sqrt(2 * M_PI * pow(std, 2));
         printf("%f %f\n", x, y);
     }
 
