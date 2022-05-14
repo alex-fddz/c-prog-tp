@@ -1,25 +1,29 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
-    float x = 0, y = 0;
-
     // Declaration of File pointer
-    FILE *datafile;
+    FILE *binfile;
+    double number;
 
     // Open file as read-only
-    datafile = fopen("function_data", "r");
+    binfile = fopen("function_data_bin", "r");
 
     // Validate file pointer
-    if (datafile != NULL) {
-        // Process the data
-        do {
-            fscanf(datafile, "%f %f\n", &x, &y); 
-            printf("x is %f and y is %f\n", x, y);
-        } while ( !feof(datafile) );
-
-        // do{ }while( !feof(datafile) );
+    if (binfile != NULL) {
+        fread(&number, sizeof(double), 1, binfile);
+        printf("%f\n", number);
+//        // Process the data
+//        do {
+//            fread(binfile, "%f %f\n", &x, &y); 
+//            printf("x is %f and y is %f\n", x, y);
+//        } while ( !feof(binfile) );
+//
+//        // do{ }while( !feof(binfile) );
     }
-    fclose(datafile); // Close the file.
+
+    fclose(binfile); // Close the file.
+    printf("OK.\n");
 
     return 1;
 }
