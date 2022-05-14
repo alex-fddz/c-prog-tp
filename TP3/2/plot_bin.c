@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int parseBinToTxt() {
+#ifdef __unix__
+#define drawPlot() \
+    system("gnuplot --persist -e 'plot \"function_data\"'");
+#else
+#error "OS not supported!"    
+#endif
+
+void parseBinToTxt() {
     // Declaration of File pointers
     FILE *binfile; // Binary data file (read)
     FILE *txtfile; // Text data file (write)
@@ -39,8 +46,12 @@ int parseBinToTxt() {
     fclose(txtfile); // Close the -write- file. 
 
     free(numbers);
+}
+
+int main() {
+    parseBinToTxt(); // Parse Binary data file
+    drawPlot();      // Plot data from text file
 
     return 1;
 }
-
 
