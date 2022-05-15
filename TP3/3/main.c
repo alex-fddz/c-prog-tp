@@ -2,13 +2,9 @@
 #include <string.h>
 #include "packing.h"
 
-#define PACK_PARAM "-p"
-#define UNPACK_PARAM "-u"
-
 int main(int argc, char **argv) {
-    char *pack_name = "p.bin";
-    int n = 2;
-    char *fnames[2] =  {"f1", "f2"};
+    int n = argc - 2;
+    char *fnames[n];
     
     if (argc < 2) { // should be 3 normally
         show_help();
@@ -16,13 +12,21 @@ int main(int argc, char **argv) {
     }
     
     if (0 == strcmp(argv[1], PACK_PARAM)) {
-        printf("Packing ...\n");
-        //file_packing(pack_name, n, fnames);
+        printf("Packing %d file(s) ...\n", n);
+        
+        // Get files to pack
+        for (int i = 0; i < n; i++) {
+            fnames[i] = argv[i+2];
+        }
+        file_packing(DEF_PACKET_FNAME, n, fnames);
+        
         printf("Done!\n");
     }
     else if (0 == strcmp(argv[1], UNPACK_PARAM)) {
         printf("Unpacking ...\n");
-        //file_unpacking(pack_name);
+        
+        file_unpacking(argv[2]);
+        
         printf("Done!\n");
     }
     else {

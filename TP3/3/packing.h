@@ -3,6 +3,10 @@
 #ifndef PACKING_H_
 #define PACKING_H_
 
+#define PACK_PARAM "-p"
+#define UNPACK_PARAM "-u"
+#define DEF_PACKET_FNAME "packet_file.bin"
+
 #define MAX_FNAME_LENGTH 256
 
 struct filestructure;
