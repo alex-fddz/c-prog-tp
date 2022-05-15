@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
 #include "packing.h"
 
 struct filestructure {
@@ -12,6 +15,17 @@ struct filestructure {
 
 void show_help() {
     printf("Help\n");
+}
+
+void create_unpack_folder(char *fname) {
+    // int j = 0;
+    // char k[3];
+    errno = 0;
+    if (mkdir(fname, S_IRWXU) == -1 && errno == EEXIST) {
+        // sprintf(k, "%d", j);
+        // strcat(fname, k);
+        // j++;
+    }
 }
 
 void file_packing(char *packed_file_name, int num_of_files, char **array_of_names) {
@@ -66,6 +80,10 @@ void file_unpacking(char *packed_file_name) {
     packet_file = fopen(packed_file_name, "rb");
     if (packet_file == NULL) return;
 
+    // Unpack in a new folder
+    create_unpack_folder(DEF_UNPACK_FNAME);
+    chdir(DEF_UNPACK_FNAME);
+
     // Get the total size of the packed file (byte to unpack)
     fseek(packet_file, 0, SEEK_END);
     bytes_to_unpack = ftell(packet_file);
@@ -73,6 +91,7 @@ void file_unpacking(char *packed_file_name) {
 
     // While there are bytes to read, get: Name | Size | Content
     while(ftell(packet_file) < bytes_to_unpack) {
+
         // Get file's -metadata-
         fread(File.filename, sizeof(char), MAX_FNAME_LENGTH, packet_file);
         fread(&File.num_of_bytes, sizeof(int), sizeof(int), packet_file);
