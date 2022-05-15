@@ -10,6 +10,10 @@ struct filestructure {
     unsigned int num_of_bytes;
 };
 
+void show_help() {
+    printf("Help\n");
+}
+
 void file_packing(char *packed_file_name, int num_of_files, char **array_of_names) {
     FILE *packet_file;  // The final packed file containing all data
     FILE *f_in;         // Each file to be packed
