@@ -13,7 +13,7 @@ struct filestructure {
 void file_packing(char *packed_file_name, int num_of_files, char **array_of_names) {
     FILE *packet_file;  // The final packed file containing all data
     FILE *f_in;         // Each file to be packed
-    char *f_buff;       // File content buffer
+    char *f_content;       // File content buffer
     filestruct File;    // File 'metadata' structure
 
     // Open output/packed file for writing
@@ -33,22 +33,60 @@ void file_packing(char *packed_file_name, int num_of_files, char **array_of_name
             File.num_of_bytes = ftell(f_in);
 
             // Prep buffer to store the content of the file 
-            f_buff = (char*)malloc(sizeof(char) * File.num_of_bytes);
+            f_content = (char*)malloc(sizeof(char) * File.num_of_bytes);
             // Read and Store file content in file buffer
             fseek(f_in, 0, SEEK_SET);
-            fread(f_buff, sizeof(char), File.num_of_bytes, f_in);
+            fread(f_content, sizeof(char), File.num_of_bytes, f_in);
 
             // Write out to packet file: Name | Size | Content
             fwrite(File.filename, sizeof(char), MAX_FNAME_LENGTH, packet_file);
             fwrite(&File.num_of_bytes, sizeof(int), sizeof(int), packet_file);
-            fwrite(f_buff, sizeof(char), File.num_of_bytes, packet_file);
+            fwrite(f_content, sizeof(char), File.num_of_bytes, packet_file);
 
             // Free buffer and Close file
-            free(f_buff);
+            free(f_content);
             fclose(f_in);
         }
     }
+    fclose(packet_file);
 }
 
-void file_unpacking(char *packed_file_name);
+void file_unpacking(char *packed_file_name) {
+    FILE *packet_file;
+    FILE *f_out;
+    char *f_content;
+    unsigned bytes_to_unpack;
+    filestruct File;
+
+    // Open packet file for reading (as bytes)
+    packet_file = fopen(packed_file_name, "rb");
+    if (packet_file == NULL) return;
+
+    // Get the total size of the packed file (byte to unpack)
+    fseek(packet_file, 0, SEEK_END);
+    bytes_to_unpack = ftell(packet_file);
+    fseek(packet_file, 0, SEEK_SET); // reset to start of file
+
+    // While there are bytes to read, get: Name | Size | Content
+    while(ftell(packet_file) < bytes_to_unpack) {
+        // Get file's -metadata-
+        fread(File.filename, sizeof(char), MAX_FNAME_LENGTH, packet_file);
+        fread(&File.num_of_bytes, sizeof(int), sizeof(int), packet_file);
+
+        // Prep file content buffer to store file's bytes
+        f_content = (char*)malloc(sizeof(char) * File.num_of_bytes);
+        fread(f_content, sizeof(char), File.num_of_bytes, packet_file);
+
+        // Create and write out file
+        f_out = fopen(File.filename, "w");
+        if (f_out != NULL) {
+            fwrite(f_content, sizeof(char), File.num_of_bytes, f_out);
+        }
+
+        // Free buffer and close file
+        free(f_content);
+        fclose(f_out);
+    }
+    fclose(packet_file);
+}
 
