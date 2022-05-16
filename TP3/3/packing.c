@@ -28,6 +28,11 @@ void create_unpack_folder(char *fname) {
     }
 }
 
+int check_file_exists(char *fname) {
+    // Return 1 if file exists, 0 otherwise
+    return access(fname, F_OK) == 0 ? 1 : 0;
+}
+
 void file_packing(char *packed_file_name, int num_of_files, char **array_of_names) {
     FILE *packet_file;  // The final packed file containing all data
     FILE *f_in;         // Each file to be packed

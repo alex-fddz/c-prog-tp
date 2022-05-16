@@ -18,6 +18,8 @@ void show_help();
 
 void create_unpack_folder();
 
+int check_file_exists();
+
 void file_packing(char *packed_file_name, int num_of_files, char **array_of_names);
 
 void file_unpacking(char *packed_file_name);
