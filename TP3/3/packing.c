@@ -18,13 +18,15 @@ void show_help() {
 }
 
 void create_unpack_folder(char *fname) {
-    // int j = 0;
-    // char k[3];
+    // Create a copy of folder name
+    char *dirname;
+    strcpy(dirname, fname);
+    // Create a directory that does not exist
+    int j = 1;
     errno = 0;
-    if (mkdir(fname, S_IRWXU) == -1 && errno == EEXIST) {
-        // sprintf(k, "%d", j);
-        // strcat(fname, k);
-        // j++;
+    while (mkdir(dirname, S_IRWXU) == -1 && errno == EEXIST) {
+        sprintf(dirname, "%s(%d)", fname, j);
+        j++;
     }
 }
 
