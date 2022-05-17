@@ -17,7 +17,7 @@ void show_help() {
     printf("Help\n");
 }
 
-void create_unpack_folder(char *fname) {
+char *create_unpack_folder(char *fname) {
     // Create a copy of folder name
     char *dirname;
     strcpy(dirname, fname);
@@ -28,6 +28,7 @@ void create_unpack_folder(char *fname) {
         sprintf(dirname, "%s(%d)", fname, j);
         j++;
     }
+    return dirname;
 }
 
 int check_file_exists(char *fname) {
@@ -88,8 +89,7 @@ void file_unpacking(char *packed_file_name) {
     if (packet_file == NULL) return;
 
     // Unpack in a new folder
-    create_unpack_folder(DEF_UNPACK_FNAME);
-    chdir(DEF_UNPACK_FNAME);
+    chdir(create_unpack_folder(DEF_UNPACK_FNAME));
 
     // Get the total size of the packed file (byte to unpack)
     fseek(packet_file, 0, SEEK_END);

@@ -16,7 +16,7 @@ typedef struct filestructure filestruct;
 
 void show_help();
 
-void create_unpack_folder();
+char *create_unpack_folder();
 
 int check_file_exists();
 
