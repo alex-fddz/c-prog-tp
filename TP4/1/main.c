@@ -13,11 +13,27 @@
 #error "OS not supported!"    
 #endif
 
+char *parseHTMLLine(char *line) {
+    // HTML tag delimiters & var init
+    const char d[3] = "<>";
+    char *token; 
+    unsigned i = 0;
+
+    // Split line into tokens 
+    token = strtok(line, d);
+    while( token != NULL ) {
+        token = strtok(NULL, d);
+        if (i == 2) break;
+        i++;
+    }
+    return token;
+}
+
 int main() {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
-    char containing_str[] = "View equity details for ";
-    char *res;
+    char stock_info_ind[] = "View equity details for ";
+    char *value;
 
     // Download stock market information
     // getStocks();
@@ -31,12 +47,13 @@ int main() {
         fgets(line, MAX_LINE_CHARS, stocks_file);
 
         // Find containing string indicating stock info start
-        res = strstr(line, containing_str);
-        if (res != NULL) {
-            printf("%s", line);
+        if (strstr(line, stock_info_ind) != NULL) {
+            value = parseHTMLLine(line);
+            printf("%s\n", value);
         }
     }
 
+    // Close stocks file
     fclose(stocks_file);
 
     return 1;
