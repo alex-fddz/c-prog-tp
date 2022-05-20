@@ -16,19 +16,25 @@
 int main() {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
+    char containing_str[] = "View equity details for ";
+    char *res;
 
     // Download stock market information
-    getStocks();
+    // getStocks();
 
     // Open (and validate) stocks file
     stocks_file = fopen("stocks.txt", "r");
     if (stocks_file == NULL) return -1;
 
-    int i = 0;
-    while (!feof(stocks_file) && i < 10) {
+    // Read file lines
+    while (!feof(stocks_file)) {
         fgets(line, MAX_LINE_CHARS, stocks_file);
-        printf("%s", line);
-        i++;
+
+        // Find containing string indicating stock info start
+        res = strstr(line, containing_str);
+        if (res != NULL) {
+            printf("%s", line);
+        }
     }
 
     fclose(stocks_file);
