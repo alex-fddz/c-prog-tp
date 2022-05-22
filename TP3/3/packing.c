@@ -14,7 +14,10 @@ struct filestructure {
 };
 
 void show_help() {
-    printf("Help\n");
+    printf("Usage: ./packing [OPTION] [FILE]...\n");
+    printf("Pack and Unpack FILEs.\n");
+    printf("  -p\tPack FILEs into a binary packet file.\n");
+    printf("  -u\tUnpack files from binary packet FILE.\n\n");
 }
 
 char *create_unpack_folder(char *fname) {
