@@ -13,6 +13,14 @@
 #error "OS not supported!"    
 #endif
 
+struct StockInfo {
+    char *name;
+    float current_price;
+    double day_change;
+};
+
+typedef struct StockInfo stock;
+
 char *parseHTMLLine(char *line) {
     // HTML tag delimiters & var init
     const char d[3] = "<>";
@@ -34,6 +42,7 @@ int main() {
     char line[MAX_LINE_CHARS];
     char stock_info_ind[] = "View equity details for ";
     char *value;
+    stock Stock;
 
     // Download stock market information
     // getStocks();
@@ -48,8 +57,14 @@ int main() {
 
         // Find containing string indicating stock info start
         if (strstr(line, stock_info_ind) != NULL) {
-            value = parseHTMLLine(line);
-            printf("%s\n", value);
+            // Get stock info from each following line
+            Stock.name = parseHTMLLine(line);
+            fgets(line, MAX_LINE_CHARS, stocks_file); // read next line
+            Stock.current_price = atof(parseHTMLLine(line));
+            fgets(line, MAX_LINE_CHARS, stocks_file); // read next line
+            Stock.day_change = atof(parseHTMLLine(line));
+
+            printf("%s\t%lf\t%lf\n", Stock.name, Stock.current_price, Stock.day_change);
         }
     }
 
