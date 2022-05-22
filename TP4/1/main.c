@@ -15,7 +15,7 @@
 
 struct StockInfo {
     char *name;
-    float current_price;
+    double current_price;
     double day_change;
 };
 
@@ -37,6 +37,21 @@ char *parseHTMLLine(char *line) {
     return token;
 }
 
+// Remove thousand separator (,) from number string
+double parseNumStr(char *num_str) {
+    char parsed_num[20];
+    const char s[2] = ","; 
+    char *token;
+    // Split number into tokens
+    token = strtok(num_str, s);
+    while( token != NULL ) {
+        // Save tokens to Parsed Number
+        strcat(parsed_num, token);
+        token = strtok(NULL, s);
+    }
+    return atof(parsed_num);
+}
+
 int main() {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
@@ -45,7 +60,7 @@ int main() {
     stock Stock;
 
     // Download stock market information
-    // getStocks();
+    //getStocks();
 
     // Open (and validate) stocks file
     stocks_file = fopen("stocks.txt", "r");
@@ -57,14 +72,16 @@ int main() {
 
         // Find containing string indicating stock info start
         if (strstr(line, stock_info_ind) != NULL) {
-            // Get stock info from each following line
+            // Get stock info: Name 
             Stock.name = parseHTMLLine(line);
-            fgets(line, MAX_LINE_CHARS, stocks_file); // read next line
-            Stock.current_price = atof(parseHTMLLine(line));
-            fgets(line, MAX_LINE_CHARS, stocks_file); // read next line
-            Stock.day_change = atof(parseHTMLLine(line));
+            // -Read next line & get Current Price
+            fgets(line, MAX_LINE_CHARS, stocks_file); 
+            Stock.current_price = parseNumStr(parseHTMLLine(line));
+            // -Read next line & get Day Change
+            fgets(line, MAX_LINE_CHARS, stocks_file); 
+            Stock.day_change = parseNumStr(parseHTMLLine(line));
 
-            printf("%s\t%lf\t%lf\n", Stock.name, Stock.current_price, Stock.day_change);
+            printf("%s, %lf, %lf\n", Stock.name, Stock.current_price, Stock.day_change);
         }
     }
 
