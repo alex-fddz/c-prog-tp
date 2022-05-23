@@ -69,7 +69,7 @@ void file_packing(char *packed_file_name, int num_of_files, char **array_of_name
 
             // Write out to packet file: Name | Size | Content
             fwrite(File.filename, sizeof(char), MAX_FNAME_LENGTH, packet_file);
-            fwrite(&File.num_of_bytes, sizeof(int), sizeof(int), packet_file);
+            fwrite(&File.num_of_bytes, sizeof(int), 1, packet_file);
             fwrite(f_content, sizeof(char), File.num_of_bytes, packet_file);
 
             // Free buffer and Close file
@@ -104,7 +104,7 @@ void file_unpacking(char *packed_file_name) {
 
         // Get file's -metadata-
         fread(File.filename, sizeof(char), MAX_FNAME_LENGTH, packet_file);
-        fread(&File.num_of_bytes, sizeof(int), sizeof(int), packet_file);
+        fread(&File.num_of_bytes, sizeof(int), 1, packet_file);
 
         // Prep file content buffer to store file's bytes
         f_content = (char*)malloc(sizeof(char) * File.num_of_bytes);
