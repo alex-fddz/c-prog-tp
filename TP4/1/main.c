@@ -55,9 +55,12 @@ double parseNumStr(char *num_str) {
 int main() {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
-    char stock_info_ind[] = "View equity details for ";
+    char *stock_info_ind = "View equity details for ";
     char *value;
-    stock Stock;
+    stock Stocks[100];
+    unsigned s_i = 0;
+    //Stocks = (stock*)malloc(sizeof(stock) * 0);
+    unsigned array_size = 0;
 
     // Download stock market information
     //getStocks();
@@ -72,20 +75,25 @@ int main() {
 
         // Find containing string indicating stock info start
         if (strstr(line, stock_info_ind) != NULL) {
+            //array_size = (s_i+1);
+            //Stocks = (stock*)realloc(Stocks, sizeof(stock) * array_size);
             // Get stock info: Name 
-            Stock.name = parseHTMLLine(line);
+            Stocks[s_i].name = parseHTMLLine(line);
             // -Read next line & get Current Price
             fgets(line, MAX_LINE_CHARS, stocks_file); 
-            Stock.current_price = parseNumStr(parseHTMLLine(line));
+            Stocks[s_i].current_price = parseNumStr(parseHTMLLine(line));
             // -Read next line & get Day Change
             fgets(line, MAX_LINE_CHARS, stocks_file); 
-            Stock.day_change = parseNumStr(parseHTMLLine(line));
+            Stocks[s_i].day_change = parseNumStr(parseHTMLLine(line));
 
-            printf("%s, %lf, %lf\n", Stock.name, Stock.current_price, Stock.day_change);
+            printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
+
+            s_i++;
         }
     }
 
-    // Close stocks file
+    // Free Stocks mem & close file
+    //free(Stocks);
     fclose(stocks_file);
 
     return 1;
