@@ -39,7 +39,7 @@ char *parseHTMLLine(char *line) {
 
 // Remove thousand separator (,) from number string
 double parseNumStr(char *num_str) {
-    char parsed_num[20];
+    char parsed_num[20] = "";
     const char s[2] = ","; 
     char *token;
     // Split number into tokens
@@ -55,12 +55,10 @@ double parseNumStr(char *num_str) {
 int main() {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
-    char *stock_info_ind = "View equity details for ";
-    char *value;
-    stock Stocks[100];
+    const char *stock_info_ind = "View equity details for ";
+    double value;
     unsigned s_i = 0;
-    //Stocks = (stock*)malloc(sizeof(stock) * 0);
-    unsigned array_size = 0;
+    stock *Stocks = (stock*)malloc(sizeof(*Stocks) * 0);
 
     // Download stock market information
     //getStocks();
@@ -75,16 +73,19 @@ int main() {
 
         // Find containing string indicating stock info start
         if (strstr(line, stock_info_ind) != NULL) {
-            //array_size = (s_i+1);
-            //Stocks = (stock*)realloc(Stocks, sizeof(stock) * array_size);
+            // Increase Stocks array size
+            Stocks = (stock*)realloc(Stocks, sizeof(*Stocks) * (s_i + 1));
+
             // Get stock info: Name 
             Stocks[s_i].name = parseHTMLLine(line);
             // -Read next line & get Current Price
             fgets(line, MAX_LINE_CHARS, stocks_file); 
-            Stocks[s_i].current_price = parseNumStr(parseHTMLLine(line));
+            value = parseNumStr(parseHTMLLine(line));
+            Stocks[s_i].current_price = value;
             // -Read next line & get Day Change
             fgets(line, MAX_LINE_CHARS, stocks_file); 
-            Stocks[s_i].day_change = parseNumStr(parseHTMLLine(line));
+            value = parseNumStr(parseHTMLLine(line));
+            Stocks[s_i].day_change = value;
 
             printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
 
@@ -93,7 +94,7 @@ int main() {
     }
 
     // Free Stocks mem & close file
-    //free(Stocks);
+    free(Stocks);
     fclose(stocks_file);
 
     return 1;
