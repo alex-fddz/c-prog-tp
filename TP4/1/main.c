@@ -4,6 +4,10 @@
 
 #define MAX_LINE_CHARS 400
 
+#define SORT_BY_NAME   1
+#define SORT_BY_PRICE  2
+#define SORT_BY_CHANGE 3
+
 #ifdef __unix__
 #define getStocks() \
     printf("Downloading stock market information . . .\n"); \
@@ -52,13 +56,31 @@ double parseNumStr(char *num_str) {
     return atof(parsed_num);
 }
 
-int main() {
+// Program Help
+void showHelp() {
+    printf("Usage: ./stocks [FIELD]\n"
+    " Where [FIELD] can take values from {1,2,3}"
+    " and corresponds to the field by which the stocks will be ordered:"
+    " by Name, Current Price (p), or Day Change, respectively.\n");
+}
+
+int getSortOption(char *opt) {
+    return 1;
+}
+
+int main(int argc, char **argv) {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
     const char *stock_info_ind = "View equity details for ";
     double value;
     unsigned s_i = 0;
     stock *Stocks = (stock*)malloc(sizeof(*Stocks) * 0);
+
+    // Check for valid sort option input
+    if (argc < 2) { 
+        showHelp();
+        return 0;
+    }
 
     // Download stock market information
     //getStocks();
@@ -73,7 +95,7 @@ int main() {
 
         // Find containing string indicating stock info start
         if (strstr(line, stock_info_ind) != NULL) {
-            // Increase Stocks array size
+            // Increase Stocks array size by one
             Stocks = (stock*)realloc(Stocks, sizeof(*Stocks) * (s_i + 1));
 
             // Get stock info: Name 
@@ -87,10 +109,27 @@ int main() {
             value = parseNumStr(parseHTMLLine(line));
             Stocks[s_i].day_change = value;
 
-            printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
+            //printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
 
             s_i++;
         }
+    }
+
+    // Check Sort option input
+    switch(getSortOption(argv[1])) {
+        case SORT_BY_NAME:
+            printf("Sorting by Name:\n");
+            break;
+        case SORT_BY_PRICE:
+            printf("Sorting by Current Price (p):\n");
+            break;
+        case SORT_BY_CHANGE:
+            printf("Sorting by Day Change:\n");
+            break;
+        default:
+            printf("Invalid Field sort option.\n");
+            showHelp();
+            return -1;
     }
 
     // Free Stocks mem & close file
