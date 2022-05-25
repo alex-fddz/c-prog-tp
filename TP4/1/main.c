@@ -64,10 +64,6 @@ void showHelp() {
     " by Name, Current Price (p), or Day Change, respectively.\n");
 }
 
-int getSortOption(char *opt) {
-    return 1;
-}
-
 int main(int argc, char **argv) {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
@@ -116,7 +112,7 @@ int main(int argc, char **argv) {
     }
 
     // Check Sort option input
-    switch(getSortOption(argv[1])) {
+    switch(atoi(argv[1])) {
         case SORT_BY_NAME:
             printf("Sorting by Name:\n");
             break;
@@ -129,7 +125,6 @@ int main(int argc, char **argv) {
         default:
             printf("Invalid Field sort option.\n");
             showHelp();
-            return -1;
     }
 
     // Free Stocks mem & close file
