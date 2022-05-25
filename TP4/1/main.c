@@ -64,6 +64,15 @@ void showHelp() {
     " by Name, Current Price (p), or Day Change, respectively.\n");
 }
 
+int compare (const void *a, const void *b)
+{
+
+  stock *stockA = (stock*)a;
+  stock *stockB = (stock*)b;
+
+  return ( stockA->current_price - stockB->current_price );
+}
+
 int main(int argc, char **argv) {
     FILE *stocks_file;
     char line[MAX_LINE_CHARS];
@@ -118,6 +127,9 @@ int main(int argc, char **argv) {
             break;
         case SORT_BY_PRICE:
             printf("Sorting by Current Price (p):\n");
+            qsort(Stocks, s_i, sizeof(stock), compare);
+            for (int i = 0; i < s_i; i++)
+                printf("%f\n", Stocks[i].current_price);
             break;
         case SORT_BY_CHANGE:
             printf("Sorting by Day Change:\n");
