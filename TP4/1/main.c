@@ -130,45 +130,41 @@ int main(int argc, char **argv) {
             value = parseNumStr(parseHTMLLine(line));
             Stocks[s_i].day_change = value;
 
-            printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
-
             s_i++;
         }
     }
+    // Close File
+    fclose(stocks_file);
 
-    printf("\n\n");
-    printf("%s,%.2f,%.2f\n", Stocks[2].name, Stocks[2].current_price, Stocks[2].day_change);
-    printf("\n\n");
-
-
-    // Check Sort option input
+    // Sort according to input
     switch(atoi(argv[1])) {
         case SORT_BY_NAME:
             printf("Sorting by Name:\n");
             qsort(Stocks, s_i, sizeof(stock), compare_name);
-            for (int i = 0; i < s_i; i++)
-                printf("%s\n", Stocks[i].name);
             break;
         case SORT_BY_PRICE:
             printf("Sorting by Current Price (p):\n");
             qsort(Stocks, s_i, sizeof(stock), compare_current_price);
-            for (int i = 0; i < s_i; i++)
-                printf("%f\n", Stocks[i].current_price);
             break;
         case SORT_BY_CHANGE:
             printf("Sorting by Day Change:\n");
             qsort(Stocks, s_i, sizeof(stock), compare_day_change);
-            for (int i = 0; i < s_i; i++)
-                printf("%f\n", Stocks[i].day_change);
             break;
         default:
-            printf("Invalid Field sort option.\n");
+            printf("Invalid field sort option.\n");
             showHelp();
     }
 
-    // Free Stocks mem & close file
+    // Print out Stocks array
+    for (int i = 0; i < s_i; i++) {
+        printf("\nStock #%d\n", i+1);
+        printf("  Name: %s\n", Stocks[i].name);
+        printf("  Current Price (p): %.2f\n", Stocks[i].current_price);
+        printf("  Day Change: %.2f\n", Stocks[i].day_change);
+    }
+
+    // Free Stocks mem
     free(Stocks);
-    fclose(stocks_file);
 
     return 1;
 }
