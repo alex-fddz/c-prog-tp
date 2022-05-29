@@ -65,22 +65,7 @@ void showHelp() {
     " by Name, Current Price (p), or Day Change, respectively.\n");
 }
 
-int compare_current_price(const void *a, const void *b) {
-    // Cast the input args as stocks
-    stock *stockA = (stock*)a;
-    stock *stockB = (stock*)b;
-    // Dereference stocks' current_price, return such that a goes before b
-    return (stockA->current_price - stockB->current_price);
-}
-
-int compare_day_change(const void *a, const void *b) {
-    // Cast the input args as stocks
-    stock *stockA = (stock*)a;
-    stock *stockB = (stock*)b;
-    // Dereference stocks' day_change, return such that a goes before b
-    return (stockA->day_change - stockB->day_change);
-}
-
+// Comparison Sort Function for Name
 int compare_name(const void *a, const void *b) {
     // Cast the input args as stocks
     stock *stockA = (stock*)a;
@@ -89,13 +74,31 @@ int compare_name(const void *a, const void *b) {
     return (stockA->name - stockB->name);
 }
 
+// Comparison Sort Function for Current Price
+int compare_current_price(const void *a, const void *b) {
+    // Cast the input args as stocks
+    stock *stockA = (stock*)a;
+    stock *stockB = (stock*)b;
+    // Dereference stocks' current_price, return such that a goes before b
+    return (stockA->current_price - stockB->current_price);
+}
+
+// Comparison Sort Function for Day Change
+int compare_day_change(const void *a, const void *b) {
+    // Cast the input args as stocks
+    stock *stockA = (stock*)a;
+    stock *stockB = (stock*)b;
+    // Dereference stocks' day_change, return such that a goes before b
+    return (stockA->day_change - stockB->day_change);
+}
+
 int main(int argc, char **argv) {
-    FILE *stocks_file;
-    char line[MAX_LINE_CHARS];
-    const char *stock_info_ind = "View equity details for ";
-    double value;
-    unsigned s_i = 0;
-    stock *Stocks = (stock*)malloc(sizeof(*Stocks) * 0);
+    FILE *stocks_file;          // HTML File with raw data
+    char line[MAX_LINE_CHARS];  // Line read from HTML file
+    const char *stock_info_ind = "View equity details for "; // Info Indicator
+    double value;               // Aux. var for numeric values
+    unsigned s_i = 0;           // Current Stock Index
+    stock *Stocks = (stock*)malloc(sizeof(*Stocks) * 0); // Init Stocks array
 
     // Check for valid sort option input
     if (argc < 2) { 
@@ -104,7 +107,7 @@ int main(int argc, char **argv) {
     }
 
     // Download stock market information
-    //getStocks();
+    getStocks();
 
     // Open (and validate) stocks file
     stocks_file = fopen("stocks.txt", "r");
@@ -133,6 +136,7 @@ int main(int argc, char **argv) {
             s_i++;
         }
     }
+
     // Close File
     fclose(stocks_file);
 
