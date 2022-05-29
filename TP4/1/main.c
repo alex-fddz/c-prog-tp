@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MAX_LINE_CHARS 400
+#define MAX_STK_NAME_CHARS 100
 
 #define SORT_BY_NAME   1
 #define SORT_BY_PRICE  2
@@ -18,7 +19,7 @@
 #endif
 
 struct StockInfo {
-    char *name;
+    char name[MAX_STK_NAME_CHARS];
     double current_price;
     double day_change;
 };
@@ -64,13 +65,28 @@ void showHelp() {
     " by Name, Current Price (p), or Day Change, respectively.\n");
 }
 
-int compare (const void *a, const void *b)
-{
+int compare_current_price(const void *a, const void *b) {
+    // Cast the input args as stocks
+    stock *stockA = (stock*)a;
+    stock *stockB = (stock*)b;
+    // Dereference stocks' current_price, return such that a goes before b
+    return (stockA->current_price - stockB->current_price);
+}
 
-  stock *stockA = (stock*)a;
-  stock *stockB = (stock*)b;
+int compare_day_change(const void *a, const void *b) {
+    // Cast the input args as stocks
+    stock *stockA = (stock*)a;
+    stock *stockB = (stock*)b;
+    // Dereference stocks' day_change, return such that a goes before b
+    return (stockA->day_change - stockB->day_change);
+}
 
-  return ( stockA->current_price - stockB->current_price );
+int compare_name(const void *a, const void *b) {
+    // Cast the input args as stocks
+    stock *stockA = (stock*)a;
+    stock *stockB = (stock*)b;
+    // Dereference stocks' name, return such that a goes before b
+    return (stockA->name - stockB->name);
 }
 
 int main(int argc, char **argv) {
@@ -104,7 +120,7 @@ int main(int argc, char **argv) {
             Stocks = (stock*)realloc(Stocks, sizeof(*Stocks) * (s_i + 1));
 
             // Get stock info: Name 
-            Stocks[s_i].name = parseHTMLLine(line);
+            strcpy(Stocks[s_i].name, parseHTMLLine(line));
             // -Read next line & get Current Price
             fgets(line, MAX_LINE_CHARS, stocks_file); 
             value = parseNumStr(parseHTMLLine(line));
@@ -114,25 +130,36 @@ int main(int argc, char **argv) {
             value = parseNumStr(parseHTMLLine(line));
             Stocks[s_i].day_change = value;
 
-            //printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
+            printf("%s,%.2f,%.2f\n", Stocks[s_i].name, Stocks[s_i].current_price, Stocks[s_i].day_change);
 
             s_i++;
         }
     }
 
+    printf("\n\n");
+    printf("%s,%.2f,%.2f\n", Stocks[2].name, Stocks[2].current_price, Stocks[2].day_change);
+    printf("\n\n");
+
+
     // Check Sort option input
     switch(atoi(argv[1])) {
         case SORT_BY_NAME:
             printf("Sorting by Name:\n");
+            qsort(Stocks, s_i, sizeof(stock), compare_name);
+            for (int i = 0; i < s_i; i++)
+                printf("%s\n", Stocks[i].name);
             break;
         case SORT_BY_PRICE:
             printf("Sorting by Current Price (p):\n");
-            qsort(Stocks, s_i, sizeof(stock), compare);
+            qsort(Stocks, s_i, sizeof(stock), compare_current_price);
             for (int i = 0; i < s_i; i++)
                 printf("%f\n", Stocks[i].current_price);
             break;
         case SORT_BY_CHANGE:
             printf("Sorting by Day Change:\n");
+            qsort(Stocks, s_i, sizeof(stock), compare_day_change);
+            for (int i = 0; i < s_i; i++)
+                printf("%f\n", Stocks[i].day_change);
             break;
         default:
             printf("Invalid Field sort option.\n");
