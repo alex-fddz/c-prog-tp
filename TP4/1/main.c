@@ -1,96 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define MAX_LINE_CHARS 400
-#define MAX_STK_NAME_CHARS 100
-
-#define SORT_BY_NAME   1
-#define SORT_BY_PRICE  2
-#define SORT_BY_CHANGE 3
-
-#ifdef __unix__
-#define getStocks() \
-    printf("Downloading stock market information . . .\n"); \
-    system("wget --quiet --output-document=stocks.txt https://www.hl.co.uk/shares/stock-market-summary/ftse-100"); \
-    printf("Stock market information retrieved !\n");
-#else
-#error "OS not supported!"    
-#endif
-
-struct StockInfo {
-    char name[MAX_STK_NAME_CHARS];
-    double current_price;
-    double day_change;
-};
-
-typedef struct StockInfo stock;
-
-char *parseHTMLLine(char *line) {
-    // HTML tag delimiters & var init
-    const char d[3] = "<>";
-    char *token; 
-    unsigned i = 0;
-
-    // Split line into tokens 
-    token = strtok(line, d);
-    while( token != NULL ) {
-        token = strtok(NULL, d);
-        if (i == 2) break;
-        i++;
-    }
-    return token;
-}
-
-// Remove thousand separator (,) from number string
-double parseNumStr(char *num_str) {
-    char parsed_num[20] = "";
-    const char s[2] = ","; 
-    char *token;
-    // Split number into tokens
-    token = strtok(num_str, s);
-    while( token != NULL ) {
-        // Save tokens to Parsed Number
-        strcat(parsed_num, token);
-        token = strtok(NULL, s);
-    }
-    return atof(parsed_num);
-}
-
-// Program Help
-void showHelp() {
-    printf("Usage: ./stocks [FIELD]\n"
-    " Where [FIELD] can take values from {1,2,3}"
-    " and corresponds to the field by which the stocks will be ordered:"
-    " by Name, Current Price (p), or Day Change, respectively.\n");
-}
-
-// Comparison Sort Function for Name
-int compare_name(const void *a, const void *b) {
-    // Cast the input args as stocks
-    stock *stockA = (stock*)a;
-    stock *stockB = (stock*)b;
-    // Dereference stocks' name, return such that a goes before b
-    return (stockA->name - stockB->name);
-}
-
-// Comparison Sort Function for Current Price
-int compare_current_price(const void *a, const void *b) {
-    // Cast the input args as stocks
-    stock *stockA = (stock*)a;
-    stock *stockB = (stock*)b;
-    // Dereference stocks' current_price, return such that a goes before b
-    return (stockA->current_price - stockB->current_price);
-}
-
-// Comparison Sort Function for Day Change
-int compare_day_change(const void *a, const void *b) {
-    // Cast the input args as stocks
-    stock *stockA = (stock*)a;
-    stock *stockB = (stock*)b;
-    // Dereference stocks' day_change, return such that a goes before b
-    return (stockA->day_change - stockB->day_change);
-}
+#include "stocks.h"
 
 int main(int argc, char **argv) {
     FILE *stocks_file;          // HTML File with raw data
@@ -133,7 +44,7 @@ int main(int argc, char **argv) {
             value = parseNumStr(parseHTMLLine(line));
             Stocks[s_i].day_change = value;
 
-            s_i++;
+            s_i++; // Increment Stock Index
         }
     }
 
