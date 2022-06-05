@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
     // Check for a valid input / call
     if (argc < 3) { 
         show_help();
-        return 0;
+        return 1;
     }
 
     /* File packing */
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
             // and validate files exist
             if (!check_file_exists(fnames[i])) {
                 printf("ERR: One or more specified files do not exist.\n");
-                return 0; // End program if a file does not exist
+                return 2; // End program if a file does not exist
             }
         }
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
         // Validate file
         if (!check_file_exists(argv[2])) {
             printf("ERR: One or more specified files do not exist.\n");
-            return 0; // End program if file does not exist
+            return 2; // End program if file does not exist
         }
 
         // Unpack files
@@ -52,5 +52,5 @@ int main(int argc, char **argv) {
         show_help();
     }
 
-    return 1;
+    return 0;
 }

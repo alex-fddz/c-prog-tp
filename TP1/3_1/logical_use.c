@@ -37,5 +37,5 @@ int main() {
     printf("| %d | %d | %d |\n", a, b, a ^ b);
     printf("|-----------|\n\n");
 
-    return 1;
+    return 0;
 }

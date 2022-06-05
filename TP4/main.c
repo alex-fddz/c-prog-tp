@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     // Check for valid sort option input
     if (argc < 2) { 
         showHelp();
-        return 0;
+        return 1;
     }
 
     // Download stock market information
@@ -81,5 +81,5 @@ int main(int argc, char **argv) {
     // Free Stocks mem
     free(Stocks);
 
-    return 1;
+    return 0;
 }

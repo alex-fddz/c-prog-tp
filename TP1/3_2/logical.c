@@ -41,8 +41,8 @@ int logical_operator_use(char x) {
         printf("|-----------|\n\n");
     }
     else {
-        return 0;
+        return 1;
     }
     
-    return 1;
+    return 0;
 } 

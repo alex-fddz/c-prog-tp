@@ -29,5 +29,5 @@ int main() {
 
     printf("\n > The amount of printable characters remain the same but the non printable characters increases because char type variables only has 255 possible values (out of which only 95 are printable). If more char values are attempted to be 'put', they simply do not exist (normal).\n");
 
-    return 1;
+    return 0;
 }

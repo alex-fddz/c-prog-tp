@@ -52,6 +52,6 @@ int main() {
     parseBinToTxt(); // Parse Binary data file
     drawPlot();      // Plot data from text file
 
-    return 1;
+    return 0;
 }
 

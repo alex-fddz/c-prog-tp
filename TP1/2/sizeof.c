@@ -9,5 +9,5 @@ int main() {
     printf("The size of a variable type float is x%lu\n", sizeof(float));
     printf("The size of a variable type double is x%lu\n", sizeof(double));
 
-    return 1;
+    return 0;
 }

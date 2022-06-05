@@ -58,5 +58,5 @@ int main() {
     }
     free(M);
 
-    return 1;
+    return 0;
 }

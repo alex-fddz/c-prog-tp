@@ -101,5 +101,5 @@ int main() {
     free(str);
     free(text);
 
-    return 1;
+    return 0;
 }

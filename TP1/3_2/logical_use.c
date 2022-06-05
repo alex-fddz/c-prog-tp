@@ -6,5 +6,5 @@ int main() {
     logical_operator_use('O');
     logical_operator_use('X');
 
-    return 1;
+    return 0;
 }

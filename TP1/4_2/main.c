@@ -34,5 +34,5 @@ int main() {
     
     displayCurrencyConversion(inQty, inCurr, outQty, outCurr);
 
-    return 1;
+    return 0;
 }

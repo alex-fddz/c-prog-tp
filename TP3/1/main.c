@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     if (argc < 4) {
         printf("Please provide the complete parameters: "
             "./plot [MEAN] [STD_DEV] [N_SAMPLES]\n");
-        return 0;
+        return 1;
     }
 
     // Gather params
@@ -53,5 +53,5 @@ int main(int argc, char** argv) {
     // Plot the result
     drawPlot();
     
-    return 1;
+    return 0;
 }

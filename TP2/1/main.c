@@ -22,5 +22,5 @@ int main(int argc, char **argv) {
     exchange(&f1, &f2);
     printf("Swapped values are f1 = %.4f and f2 = %.4f.\n\n", f1, f2);
 
-    return 1;
+    return 0;
 }
