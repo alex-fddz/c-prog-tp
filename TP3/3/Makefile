@@ -1,4 +1,4 @@
-plot: main.o packing.o
+packing: main.o packing.o
 	gcc main.o packing.o -o packing
 
 main.o: main.c
