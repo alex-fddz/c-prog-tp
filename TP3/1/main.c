@@ -17,7 +17,8 @@ int main(int argc, char** argv) {
 
     // Check for complete parameter input
     if (argc < 4) {
-        printf("Please provide the complete parameters.\n");
+        printf("Please provide the complete parameters: "
+            "./plot [MEAN] [STD_DEV] [N_SAMPLES]\n");
         return 0;
     }
 
