@@ -22,16 +22,17 @@ void show_help() {
 
 char *create_unpack_folder(char *fname) {
     // Create a copy of folder name
-    char *dirname;
-    strcpy(dirname, fname);
+    //char *dirname;
+    //strcpy(dirname, fname);
     // Create a directory that does not exist
-    int j = 1;
-    errno = 0;
-    while (mkdir(dirname, S_IRWXU) == -1 && errno == EEXIST) {
-        sprintf(dirname, "%s(%d)", fname, j);
-        j++;
-    }
-    return dirname;
+    mkdir(fname, S_IRWXU);
+    //int j = 1;
+    //errno = 0;
+    //while (mkdir(dirname, S_IRWXU) == -1 && errno == EEXIST) {
+    //    sprintf(dirname, "%s(%d)", fname, j);
+    //    j++;
+    //}
+    return fname; //dirname;
 }
 
 int check_file_exists(char *fname) {
